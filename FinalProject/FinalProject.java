@@ -33,7 +33,40 @@ public class FinalProject {
 		Matcher matcher1 = pattern.matcher(inputTime);
 		return matcher1.matches();       
 	}
-	
+
+	public static void readFile(String filename)
+	{
+		try
+		{
+			BufferedReader bf = new BufferedReader(new FileReader(filename)); //load data from file
+			//file + scanne
+			String line = bf.readLine(); //read entire line as string
+			List<String> listOfStrings = new ArrayList<String>(); //list that holds strings of a file
+			while(line != null) //checking for end of file
+			{
+				listOfStrings.add(line);					
+				for(int i=0; i < listOfStrings.size(); i++)
+				{
+					String[] attributes = line.split(",");
+					int trip_id = Integer.parseInt(attributes[0]);
+					String arrival_time = attributes[1];
+					String departure_time = attributes[2];
+					int stop_id = Integer.parseInt(attributes[3]);
+					int stop_sequence = Integer.parseInt(attributes[4]);
+					int stop_headsign = Integer.parseInt(attributes[5]); //?? not sure what type
+					int pickup_type = Integer.parseInt(attributes[6]);
+					int drop_off_type = Integer.parseInt(attributes[7]);
+					double shape_dist_travelled = Double.parseDouble(attributes[8]);
+		}
+
+		catch (IOException e)
+		{
+
+		}
+	}
+
+
+
 	public static void searchForTripsAtTime(String inputTime)
 	{
 		//check if valid time
@@ -125,3 +158,5 @@ public class FinalProject {
 		input.close();
 	}
 }
+		
+
