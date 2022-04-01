@@ -1,72 +1,55 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.ResolverStyle;
-import java.util.ArrayList;
-import java.util.List;
+//import java.io.BufferedReader;
+import java.io.File;
+//import java.io.FileReader;
+//import java.io.IOException;
+//import java.time.LocalTime;
+//import java.time.format.DateTimeFormatter;
+//import java.time.format.ResolverStyle;
+//import java.util.ArrayList;
+//import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FinalProject {
 
-	public String fileName;
-
-
-	FinalProject() //constructor
-	{
-
-
-	}
-
 	public static boolean validTime(String inputTime) 
 	{
 		String timeFormat = "((\\s?)[0-9]|[01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]";
 		Pattern pattern = Pattern.compile(timeFormat);
-		if (inputTime == null) 
+		if(inputTime == null) 
 		{
 			return false;
 		}
-
-		Matcher matcher1 = pattern.matcher(inputTime);
-		return matcher1.matches();       
+		Matcher matcher = pattern.matcher(inputTime);
+		return matcher.matches();       
 	}
 
-	public static void readFile(String filename)
+	public static void readFile(String filename) //read in file
 	{
 		try
 		{
-			BufferedReader bf = new BufferedReader(new FileReader(filename)); //load data from file
-			//file + scanne
-			String line = bf.readLine(); //read entire line as string
-			List<String> listOfStrings = new ArrayList<String>(); //list that holds strings of a file
-			while(line != null) //checking for end of file
+			File inputFile = new File(filename);
+			Scanner scanner = new Scanner(inputFile);
+			while(scanner.hasNextLine())
 			{
-				listOfStrings.add(line);					
-				for(int i=0; i < listOfStrings.size(); i++)
-				{
-					String[] attributes = line.split(",");
-					int trip_id = Integer.parseInt(attributes[0]);
-					String arrival_time = attributes[1];
-					String departure_time = attributes[2];
-					int stop_id = Integer.parseInt(attributes[3]);
-					int stop_sequence = Integer.parseInt(attributes[4]);
-					int stop_headsign = Integer.parseInt(attributes[5]); //?? not sure what type
-					int pickup_type = Integer.parseInt(attributes[6]);
-					int drop_off_type = Integer.parseInt(attributes[7]);
-					double shape_dist_travelled = Double.parseDouble(attributes[8]);
-		}
-
-		catch (IOException e)
+				String[] attributes = scanner.nextLine().trim().split(",");
+				StopTimes stops = new StopTimes(Integer.parseInt(attributes[0]), attributes[1], attributes[2], Integer.parseInt(attributes[3]),
+						Integer.parseInt(attributes[4]), Integer.parseInt(attributes[5]), Integer.parseInt(attributes[6]),
+						Integer.parseInt(attributes[7]), Double.parseDouble(attributes[8]));
+				System.out.println(stops.arrival_time);						
+			}
+			scanner.close();
+		}	
+		catch(Exception e)
 		{
+			System.out.print("E");
 
 		}
 	}
 
 
-
+	/*
 	public static void searchForTripsAtTime(String inputTime)
 	{
 		//check if valid time
@@ -148,15 +131,19 @@ public class FinalProject {
 		}
 		return array;
 	}
+	*/
 
 	public static void main(String[] args)
 	{
+		/*
 		System.out.print("Please insert a time: ");
 		Scanner input = new Scanner(System.in);
 		String inputTime = input.next();
 		searchForTripsAtTime(inputTime);
 		input.close();
+		*/
+		readFile("stop_times.txt");
 	}
 }
-		
+
 

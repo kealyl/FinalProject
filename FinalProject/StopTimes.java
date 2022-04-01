@@ -1,15 +1,15 @@
 
 public class StopTimes {
 	
-	public static int trip_id;
-	public static String arrival_time;
-	public static String departure_time;
-	public static int stop_id;
-	public static int stop_sequence;
-	public static int stop_headsign; //?? not sure what type
-	public static int pickup_type;
-	public static int drop_off_type;
-	public static double shape_dist_travelled;
+	public int trip_id;
+	public String arrival_time;
+	public String departure_time;
+	public int stop_id;
+	public int stop_sequence;
+	public int stop_headsign; //?? not sure what type
+	public int pickup_type;
+	public int drop_off_type;
+	public double shape_dist_travelled;
 	
 	StopTimes(int trip_id, String arrival_time, String departure_time, int stop_id, int stop_sequence, 
 			int stop_headsign, int pickup_type, int drop_off_type, double shape_dist_travelled)
@@ -23,6 +23,8 @@ public class StopTimes {
 		this.pickup_type = pickup_type;
 		this.drop_off_type = drop_off_type;
 		this.shape_dist_travelled = shape_dist_travelled;
+		
+		
 	}
 
 	
