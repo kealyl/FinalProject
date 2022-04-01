@@ -38,8 +38,8 @@ public class FinalProject {
 						Integer.parseInt(attributes[4]), Integer.parseInt(attributes[5]), Integer.parseInt(attributes[6]),
 						Integer.parseInt(attributes[7]), Double.parseDouble(attributes[8]));
 				System.out.println(stops.arrival_time);						
-			}
-			scanner.close();
+			} 
+			
 		}	
 		catch(Exception e)
 		{

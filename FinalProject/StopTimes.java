@@ -6,7 +6,7 @@ public class StopTimes {
 	public String departure_time;
 	public int stop_id;
 	public int stop_sequence;
-	public int stop_headsign; //?? not sure what type
+	public int stop_headsign; 
 	public int pickup_type;
 	public int drop_off_type;
 	public double shape_dist_travelled;
