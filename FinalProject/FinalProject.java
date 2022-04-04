@@ -107,6 +107,46 @@ public class FinalProject {
 			System.out.print("Error reading in file.");
 		}
 	}
+	
+	public static void ternarySearchTree(String searchWord)
+	{
+		try
+		{
+			File inputFile = new File("stops.txt");
+			Scanner scanner = new Scanner(inputFile);
+			scanner.nextLine(); //skips first line of text file
+			ArrayList<String> stopNames = new ArrayList<>();
+			while(scanner.hasNextLine())
+			{
+				String[] line = scanner.nextLine().trim().split(",");
+				String stop_name = line[2];
+				//
+				String[] splitStopName = stop_name.split(" ");
+				String flagstop = splitStopName[0];
+				if(flagstop.equalsIgnoreCase("WB") || flagstop.equalsIgnoreCase("NB") || flagstop.equalsIgnoreCase("SB")
+						|| flagstop.equalsIgnoreCase("EB"))
+				{
+					flagstop = splitStopName[splitStopName.length-1]; //put flagstop to end of stopName
+					stop_name = splitStopName.toString(); //prints new layout of stop_name
+				}
+				stopNames.add(stop_name);
+			}
+			TST newTST = new TST(stopNames); //initialises new TST containing all stop names
+			boolean searchSuccessful = newTST.search(searchWord); //returns true if finds item
+			if(searchSuccessful)
+			{
+				//print out info about stop
+			}
+			
+		}
+		
+		catch(Exception e)
+		{
+			System.out.print("Error reading in file.");
+		}
+		
+		
+	}
 
 	public static void main(String[] args)
 	{		
@@ -126,8 +166,9 @@ public class FinalProject {
 		}
 		if(choice==2)
 		{
-			System.out.print("Search: ");
-			String search = scanner.next();
+			System.out.print("Please enter your search: ");
+			String searchWord = scanner.next();
+			ternarySearchTree(searchWord);
 
 		}
 		if(choice==3)
