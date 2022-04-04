@@ -1,7 +1,5 @@
 import java.util.List;
 
-import com.google.common.base.Strings;
-
 public class TST {
 	
 	private TSTNode rootOfTree;	
@@ -55,7 +53,7 @@ public class TST {
 		return node;
 	}
 	
-	public TSTNode insert(final String string)
+	public TSTNode insert(final String string) //inserts a string into TST
 	{
 		if((string == null) || (string.isEmpty()))
 		{
@@ -79,6 +77,42 @@ public class TST {
 		{
 			return false;
 		}
+	}
+	
+	
+	//search for word (bus stop name) in the TST
+	private boolean search(final TSTNode node, final char[] stopName, final int i)
+	{
+		final char currentCharacter = stopName[i];
+		if(node == null)
+		{
+			return false;
+		}
+		if(node.getChar() < currentCharacter)
+		{
+			return search(node.getRightChild(), stopName, i);
+		}
+		else if(node.getChar() > currentCharacter)
+		{
+			return search(node.getLeftChild(), stopName, i);
+		}
+		else
+		{
+			if(i == (stopName.length-1))
+			{
+				return node.isWordEnd();
+			}
+			return search(node.getMiddleChild(), stopName, i+1);
+		}
+	}
+	public boolean search(final String searchWord)
+	{
+		if((searchWord == null) || (searchWord.isEmpty()))
+		{
+			return false;
+		}
+		boolean searchResult = search(getRoot(), searchWord.toUpperCase().toCharArray(), 0);
+		return searchResult;
 	}
 	
 	
