@@ -1,13 +1,13 @@
 public class TST {
 	
-	private TST root;
+	private TSTNode root;
 	
 	TST() // constructor - empty TST
 	{
 		this.root = null;
 	}
 	
-	public TST getRoot() //returns root of TST
+	public TSTNode getRoot() //returns root of TST
 	{
 		return root;
 	}
