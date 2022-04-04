@@ -37,33 +37,34 @@ public class FinalProject {
 		return array;
 	}
 
-	public static void readFile(String filename, String inputTime) //read in file
+	public static void readFile(String inputTime) //read in file
 	{
 		try
 		{
-			File inputFile = new File(filename);
+			File inputFile = new File("stop_times.txt");
 			Scanner scanner = new Scanner(inputFile);
-			ArrayList<String> validArrivalTimes = new ArrayList<String>();
-			ArrayList<Integer> tripIDs = new ArrayList<Integer>();
-			
-			int i = 0 ;
+			scanner.nextLine(); //skips first line of text file
+			int i = 0;
 			while(scanner.hasNextLine())
 			{
-				if(i == 0) //ignores first line of file
+				String[] attributes = scanner.nextLine().trim().split(",");
+				int tripID = Integer.parseInt(attributes[0]);
+				String arrival_time = attributes[1];
+				if(validTime(arrival_time) == true)
 				{
-					i++;
-				}
-				else
-				{
-					String[] attributes = scanner.nextLine().trim().split(",");
-					
-					StopTimes stops = new StopTimes(Integer.parseInt(attributes[0]), attributes[1], attributes[2], Integer.parseInt(attributes[3]),
-							Integer.parseInt(attributes[4]), Integer.parseInt(attributes[5]), Integer.parseInt(attributes[6]),
-							Integer.parseInt(attributes[7]), Double.parseDouble(attributes[8]));
-					//System.out.println(stops.arrival_time);
-					
-					//^sort out this constructor call
+					String departure_time = attributes[2];
+					if(validTime(departure_time) == true)
+					{
+						//System.out.println(arrival_time); // prints this fine
+						if(arrival_time.equals(inputTime)) // not working from here
+						{
+							i++;
+							System.out.print("\nRESULT " + i + "\nTrip ID: " + tripID + "\nArrival Time: " + arrival_time);
 
+						}
+					}
+				}
+				/*
 					//String arrival_time = attributes[1];
 					int count = 0;
 					if(validTime(stops.arrival_time) == true) //checks that times are valid times
@@ -78,15 +79,19 @@ public class FinalProject {
 									"\nArrival Time: " + stops.arrival_time; //add in other details here 
 							System.out.println(printDetails);
 						}
-						
+
 					}
 					i++;
-					//create array of trip IDs
-					//sort array using insertion sort
+					*/
 
-				} 
-				//converting trip ID array list to array & sorting using insertionSort
-				/*
+			} 
+			if (i == 0) //no matching times found
+			{
+				System.out.print("Sorry, there are no buses departing at this time.");
+			}
+			
+			//converting trip ID array list to array & sorting using insertionSort
+			/*
 				int[] tripIDArray = new int [tripIDs.size()];
 				Iterator<Integer> iterator = tripIDs.iterator();
 				for(int j=0; iterator.hasNext(); j++)
@@ -94,55 +99,46 @@ public class FinalProject {
 					tripIDArray[j] = iterator.next();
 				}
 				int[] sortedTripIDs = insertionSort(tripIDArray);
-				*/
-			}
-			scanner.close();
-		}	
+			 */
+		}
+
 		catch(Exception e)
 		{
 			System.out.print("Error reading in file.");
 		}
 	}
 
-	public static void tripSearch(String inputTime)
-	{
-		if(validTime(inputTime) == true)
-		{
-			readFile("stop_times.txt", inputTime);
-			//if inputTime == stops.arrival_time > print out all info about stops
-
-		}
-		else
-		{
-			System.out.println("Error - Invalid Time! Please enter a time in the form 'hh:mm:ss'.");
-		}
-	}
-
 	public static void main(String[] args)
-	{
-		
+	{		
 		System.out.print("Welcome! This is the Vancouver bus system. \n"
 				+ "Type '1' if you wish to find the shortest path between two bus stops.\n"
 				+ "Type '2' if you wish to search for a bus stop.\n"
 				+ "Type '3' if you wish to find all trips occurring at a given arrival time.\n"
 				+ "Type '4' if you would like to exit the system.\n" 
 				+ "Please enter your choice here: ");
-		Scanner scnr = new Scanner(System.in);
-		int choice = scnr.nextInt();
+		Scanner scanner = new Scanner(System.in);
+		int choice = scanner.nextInt();
 
 		if(choice==1)
 		{
 
+
 		}
 		if(choice==2)
 		{
-			System.out.print("Please enter an arrival time to see all available trips: ");
-			String inputTime = scnr.next();
-			tripSearch(inputTime);
+			System.out.print("Search: ");
+			String search = scanner.next();
+
 		}
 		if(choice==3)
 		{
-
+			System.out.print("Please enter an arrival time to see all available trips: ");
+			String inputTime = scanner.next();
+			if(validTime(inputTime))
+			{
+				readFile(inputTime);
+			}
+			
 		}
 		if(choice==4)
 		{
@@ -152,9 +148,6 @@ public class FinalProject {
 		{
 			System.out.println("Error! - Please enter a valid choice, 1,2,3 or 4.");
 		}
-		 
-
-
 	}
 }
 
