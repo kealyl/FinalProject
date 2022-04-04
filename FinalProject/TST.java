@@ -1,8 +1,14 @@
 
 public class TST {
 	
-	TST() // constructor
+	private TST root;
+	
+	TST() // constructor - empty TST
 	{
-		
+		this.root = null;
 	}
+	
+	
+	
+	
 }
