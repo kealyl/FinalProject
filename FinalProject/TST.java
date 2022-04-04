@@ -33,6 +33,26 @@ public class TST {
 		{
 			node = new TSTNode(currentCharacter);
 		}
+		if(node.getChar() > currentCharacter)
+		{
+			node.left = insert(node.getLeftChild(), stopName, i);
+		}
+		else if(node.getChar() < currentCharacter)
+		{
+			node.right = insert(node.getRightChild(), stopName, i);
+		}
+		else
+		{
+			if((i+1) < stopName.length)
+			{
+				node.middle = insert(node.getMiddleChild(), stopName, i+1);
+			}
+			else
+			{
+				node.setWordEnd(true);
+			}
+		}
+		return node;
 	}
 	
 	public TSTNode insert(final String string)
