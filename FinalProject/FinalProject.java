@@ -52,7 +52,6 @@ public class FinalProject {
 				String arrival_time = line[1];
 				arrival_time = arrival_time.trim();
 				String departure_time = line[2];
-
 				int stopID = Integer.parseInt(line[3]);
 				int stopSequence = Integer.parseInt(line[4]);
 				String stopHeadsign = line[5];
@@ -64,7 +63,7 @@ public class FinalProject {
 				{
 					if(validTime(departure_time) == true)
 					{
-						if(arrival_time.equals(inputTime))
+						if(inputTime.equals(arrival_time) || inputTime.equals("0"+arrival_time)) //allows user to input 0 at start 
 						{
 							i++;
 							System.out.print("\nRESULT " + i + "\nTrip ID: " + tripID + "\nArrival Time: " + arrival_time
@@ -106,7 +105,9 @@ public class FinalProject {
 			File inputFile = new File("stops.txt");
 			Scanner scanner = new Scanner(inputFile);
 			scanner.nextLine(); //skips first line of text file
+			TST<String> newTST = new TST<String>(); // create new TST
 			ArrayList<String> stopNames = new ArrayList<>();
+			int i = 0;
 			while(scanner.hasNextLine())
 			{
 				String[] line = scanner.nextLine().trim().split(",");
@@ -121,17 +122,18 @@ public class FinalProject {
 					flagstop = splitStopName[splitStopName.length-1]; //put flagstop to end of stopName
 					stop_name = splitStopName.toString(); //prints new layout of stop_name
 				}
-				stopNames.add(stop_name);
-				//if statement here with TST ? using insert function -> search function
+				//stopNames.add(stop_name);
+				//newTST.put(stop_name, i);
+				i++;
 			}
 			/*
 			boolean searchSuccessful = newTST.search(searchWord); //returns true if finds item
 			if(searchSuccessful)
 			{
 				//print out info about stop
-				
+
 			}
-			*/
+			 */
 
 		}
 
@@ -142,24 +144,28 @@ public class FinalProject {
 	}
 
 	public static void main(String[] args)
-	{		
-		System.out.print("Welcome! This is the Vancouver bus system. \n"
-				+ "Type '1' if you wish to find the shortest path between two bus stops.\n"
-				+ "Type '2' if you wish to search for a bus stop.\n"
-				+ "Type '3' if you wish to find all trips occurring at a given arrival time.\n"
-				+ "Type '4' if you would like to exit the system.\n" 
-				+ "Please enter your choice here: ");
-		Scanner scanner = new Scanner(System.in);
-		int choice = scanner.nextInt();
-
-		if(choice==1)
+	{	
+		boolean finished = false;
+		System.out.println("Welcome! This is the Vancouver bus system. ");
+		
+		while(finished == false)
 		{
+			System.out.print("Type '1' if you wish to find the shortest path between two bus stops.\n"
+					+ "Type '2' if you wish to search for a bus stop.\n"
+					+ "Type '3' if you wish to find all trips occurring at a given arrival time.\n"
+					+ "Type '4' if you would like to exit the system.\n" 
+					+ "Please enter your choice here: ");
+			Scanner scanner = new Scanner(System.in);
+			int choice = scanner.nextInt();
 
+			if(choice==1)
+			{
 
-		}
-		if(choice==2)
-		{
-			/*
+				finished = true;
+			}
+			if(choice==2)
+			{
+				/*
 			System.out.print("Please enter your search: ");
 			String searchWord = scanner.next();
 			ternarySearchTree(searchWord);
@@ -183,40 +189,43 @@ public class FinalProject {
 			{
 				System.out.println("Search unsuccessful");
 			}
-			*/
-		}
-		
-		if(choice==3)
-		{
-			boolean finished = false;
-			while(finished == false)
+				 */
+				finished = true;
+			}
+
+			if(choice==3)
 			{
-				System.out.print("Please enter an arrival time (in the form hh:mm:ss) to see all available trips: ");
-				String inputTime = scanner.next();
-				if(validTime(inputTime))
+				boolean over = false;
+				while(over == false)
 				{
-					timeSearch(inputTime);
-					finished = true;
+					System.out.print("Please enter an arrival time (in the form hh:mm:ss) to see all available trips: ");
+					Scanner scanner2 = new Scanner(System.in);
+					String inputTime = scanner2.next();
+					if(validTime(inputTime))
+					{
+						timeSearch(inputTime);
+						over = true;
+						finished = true;
+					}
+					else
+					{
+						System.out.println("This is not a valid time.");
+					}
 				}
-				else
-				{
-					System.out.println("This is not a valid time.");
-				}
+				
+			}
+			if(choice==4)
+			{
+				System.out.println("Goodbye. Thank you for visiting the Vancouver bus system.");
+				finished = true;
+			}
+			else
+			{
+				System.out.println();
+				System.out.println("Error! - Please enter a valid choice.");
 			}
 
 		}
-		/*
-
-		if(choice==4)
-		{
-			System.out.println("Goodbye. Thank you for visiting the Vancouver bus system.");
-		}
-		else
-		{
-			System.out.println("Error! - Please enter a valid choice, 1,2,3 or 4.");
-		}
-		*/
-		
 	}
 }
 

@@ -7,3 +7,6 @@
 /TST$resultDelete.class
 /ShortestPaths.class
 /TST$Node.class
+/Queue.class
+/Queue$LinkedIterator.class
+/Queue$Node.class
