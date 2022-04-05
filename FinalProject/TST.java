@@ -1,230 +1,83 @@
-import java.util.ArrayList;
-import java.util.List;
 
-public class TST {
 
-	private TSTNode rootOfTree;	
+public class TST<Value> {
 
-	private enum directionOfNode //tells us direction we came from parent node to reach current node
+	private int size; //size
+	private Node<Value> root; //root of tree
+
+	private static class Node<Value>
 	{
-		LEFT,
-		RIGHT,
-		MIDDLE
+		private char character;
+		private Node<Value> left, middle, right;
+		private Value val; //value of string
 	}
 
-	TST() // constructor - empty TST
+	public TST() //initialises empty string TST
 	{
-		this.rootOfTree = null;
+
 	}
 
-	TST(final List<String> stops) //creates a TST with stops specified in list
+	public int size() // returns number of key value pairs in TST
 	{
-		for (String stop: stops)
+		return size;
+	}
+
+	public boolean contains(String key)
+	{
+		if(key==null)
 		{
-			this.insert(stop);
+			throw new IllegalArgumentException("argument to contains() is null");
 		}
+		return get(key) != null;
 	}
 
-
-	private TSTNode insert(TSTNode node, final char[] stopName, final int i)
+	public Value get(String key)
 	{
-		final char currentCharacter = stopName[i];
+		if(key == null) 
+		{
+			throw new IllegalArgumentException("calls get() with null argument");
+		}
+		if(key.length() == 0) 
+		{
+			throw new IllegalArgumentException("key must have length >= 1");
+		}
+		Node<Value> node = get(root, key, 0);
 		if(node == null)
-		{
-			node = new TSTNode(currentCharacter);
-		}
-		if(node.getChar() > currentCharacter)
-		{
-			node.left = insert(node.getLeftChild(), stopName, i);
-		}
-		else if(node.getChar() < currentCharacter)
-		{
-			node.right = insert(node.getRightChild(), stopName, i);
-		}
-		else
-		{
-			if((i+1) < stopName.length)
-			{
-				node.middle = insert(node.getMiddleChild(), stopName, i+1);
-			}
-			else
-			{
-				node.setWordEnd(true);
-			}
-		}
-		return node;
-	}
-
-	public TSTNode insert(final String string) //inserts a string into TST
-	{
-		if((string == null) || (string.isEmpty()))
 		{
 			return null;
 		}
-		rootOfTree = insert(this.rootOfTree, string.toUpperCase().toCharArray(),0);
-		return getRoot();
-	}
-	public TSTNode getRoot() //returns root of TST
-	{
-		return rootOfTree;
+		return node.val;
 	}
 
-	public boolean isEmptyTST() //returns true if empty TST
+	private Node<Value> get(Node<Value> node, String key, int i) 
 	{
-		if(this.getRoot()==null)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-
-	//search for word (bus stop name) in the TST
-	private boolean search(final TSTNode node, final char[] stopName, final int i)
-	{
-		final char currentCharacter = stopName[i];
 		if(node == null)
 		{
-			return false;
+			return null;
 		}
-		if(node.getChar() < currentCharacter)
+		if(key.length() == 0)
 		{
-			return search(node.getRightChild(), stopName, i);
+			throw new IllegalArgumentException("Length of key must be >= 1");
 		}
-		else if(node.getChar() > currentCharacter)
+		char character = key.charAt(i);
+		if(character < node.character) 
 		{
-			return search(node.getLeftChild(), stopName, i);
+			return get(node.left, key, i);
+		}
+		else if(character > node.character) 
+		{
+			return get(node.right, key, i);
+		}
+		else if(i < key.length() - 1) 
+		{
+			return get(node.middle, key, i+1);
 		}
 		else
 		{
-			if(i == (stopName.length-1))
-			{
-				return node.isWordEnd();
-			}
-			return search(node.getMiddleChild(), stopName, i+1);
-		}
-	}
-	public boolean search(final String searchWord)
-	{
-		if((searchWord == null) || (searchWord.isEmpty()))
-		{
-			return false;
-		}
-		boolean searchResult = search(getRoot(), searchWord.toUpperCase().toCharArray(), 0);
-		return searchResult;
-	}
-
-	// functions to delete a string from TST
-	private class resultDelete
-	{
-		boolean isSubstring;
-		boolean isSuccess;
-
-		resultDelete(boolean isSuccess, boolean isSubstring)
-		{
-			this.isSubstring = isSubstring;
-			this.isSuccess = isSuccess;
+			return node;
 		}
 	}
 
-	public boolean delete(final String string)
-	{
 
-		ArrayList<directionOfNode> nodeDirections = new ArrayList<>();
-		final resultDelete result = delete(getRoot(), string.toUpperCase().toCharArray(), 0, nodeDirections);
-		if((string == null) || (string.isEmpty()))
-		{
-			return false;
-		}
-		if (!result.isSubstring && result.isSuccess)
-		{
-			tidy(getRoot(), string.toUpperCase().toCharArray(), 0);
-
-		}
-		return result.isSuccess;	
-	}
-
-	private resultDelete delete(final TSTNode node, final char[] stopName, final int i, final ArrayList<directionOfNode> nodeDirections)
-	{
-		final char currentCharacter = stopName[i];
-		if(node==null)
-		{
-			return new resultDelete(false,false);
-		}
-
-		if (node.getChar() < currentCharacter)
-		{
-			nodeDirections.add(directionOfNode.RIGHT);
-			return delete(node.getRightChild(), stopName, i, nodeDirections);
-		}
-		else if(node.getChar() > currentCharacter)
-		{
-			nodeDirections.add(directionOfNode.LEFT);
-			return delete(node.getLeftChild(), stopName, i, nodeDirections);
-		}
-		else
-		{
-			if(node.isWordEnd() && i == stopName.length)
-			{
-				node.setWordEnd(false);
-				nodeDirections.add(directionOfNode.MIDDLE);
-
-				boolean isSubstring;
-				if(node.getMiddleChild() == null)
-				{
-					isSubstring = false;
-				}
-				else
-				{
-					nodeDirections.add(directionOfNode.MIDDLE);
-					isSubstring = true;
-				}
-				return new resultDelete(true, isSubstring);
-
-			}
-			nodeDirections.add(directionOfNode.MIDDLE);
-			return delete(node.getMiddleChild(), stopName, i+1, nodeDirections);
-		}
-	}
-	
-	private boolean tidy(TSTNode node, final char[] stopName, final int i)
-	{
-		final char currentCharacter = stopName[i];
-		if(node==null)
-		{
-			return false;
-		}
-		
-		if(node.getChar() < currentCharacter)
-		{
-			return tidy(node.getRightChild(), stopName, i);
-		}
-		else if(node.getChar() > currentCharacter)
-		{
-			return tidy(node.getLeftChild(), stopName, i);
-		}
-		else
-		{
-			if(node.isWordEnd() && (i == stopName.length))
-			{
-				if(node.isLeafNode())
-				{
-					node = null;
-					return true;
-				}
-			}
-			boolean isLeafNode = tidy(node.getMiddleChild(), stopName, i+1);
-			if(node.isLeafNode() && isLeafNode)
-			{
-				node = null;
-				return true;
-			}
-		}
-		return false;
-		
-	}
 
 }
