@@ -79,17 +79,6 @@ public class FinalProject {
 			{
 				System.out.print("Sorry, there are no buses departing at this time.");
 			}
-
-			//converting trip ID array list to array & sorting using insertionSort
-			/*
-				int[] tripIDArray = new int [tripIDs.size()];
-				Iterator<Integer> iterator = tripIDs.iterator();
-				for(int j=0; iterator.hasNext(); j++)
-				{
-					tripIDArray[j] = iterator.next();
-				}
-				int[] sortedTripIDs = insertionSort(tripIDArray);
-			 */
 		}
 
 		catch(Exception e)
@@ -100,12 +89,11 @@ public class FinalProject {
 
 	public static void ternarySearchTree(String searchWord, ArrayList<busStops> stopArray)
 	{
-		
 		try
 		{
 			File inputFile = new File("stops.txt");
 			Scanner scanner = new Scanner(inputFile);
-			
+
 			TST<String> newTST = new TST<String>(); // create new TST
 			scanner.nextLine(); //skips first line of text file
 			while(scanner.hasNextLine())
@@ -148,22 +136,29 @@ public class FinalProject {
 		}		
 	}
 
-	/*
+
 	public static String removeFlagStop(String stopName)
 	{
-		//moving keyword flagstops WB,NB,SB,EB to end of word
 		String[] splitStopName = stopName.split(" ");
 		String flagstop = splitStopName[0]; //might need to trim
+		String[] flagstopArray = {splitStopName[0], " ", splitStopName[1]};
+		String flagstopLong = flagstopArray.toString();
+
+		//moving keyword flagstops,WB,NB,SB,EB to end of word
 		if(flagstop.equalsIgnoreCase("WB") || flagstop.equalsIgnoreCase("NB") || flagstop.equalsIgnoreCase("SB")
-				|| flagstop.equalsIgnoreCase("EB"))
+				|| flagstop.equalsIgnoreCase("EB") || flagstop.equalsIgnoreCase("flagstop"))
 		{
 			flagstop = splitStopName[splitStopName.length-1]; //put flagstop to end of stopName
-			stop_name = splitStopName.toString(); //prints new layout of stop_name
+			stopName = splitStopName.toString(); //prints new layout of stop_name
 		}
-
-
+		if(flagstopLong.equalsIgnoreCase("FLAGSTOP WB") || flagstopLong.equalsIgnoreCase("FLAGSTOP NB") || 
+				flagstopLong.equalsIgnoreCase("FLAGSTOP SB") || flagstopLong.equalsIgnoreCase("FLAGSTOP EB"))
+		{
+			flagstopLong = splitStopName[splitStopName.length-1];
+		}
+		return splitStopName.toString();
 	}
-	 */
+
 	public static void main(String[] args)
 	{	
 		ArrayList<busStops> stopsArray = new ArrayList<busStops>();
@@ -174,60 +169,64 @@ public class FinalProject {
 
 		while(finished == false)
 		{
-			System.out.print("Type '1' if you wish to find the shortest path between two bus stops.\n"
+			System.out.print("\nType '1' if you wish to find the shortest path between two bus stops.\n"
 					+ "Type '2' if you wish to search for a bus stop.\n"
 					+ "Type '3' if you wish to find all trips occurring at a given arrival time.\n"
 					+ "Type '4' if you would like to exit the system.\n" 
 					+ "Please enter your choice here: ");
 			Scanner scanner = new Scanner(System.in);
-			int choice = scanner.nextInt();
 
-			if(choice==1)
+			if(scanner.hasNextInt())
 			{
-
-
-				finished = true;
-			}
-			if(choice==2)
-			{
-				System.out.print("Please enter your search: ");
-				String searchWord = scanner.next();
-				searchWord = searchWord.toUpperCase();
-				ternarySearchTree(searchWord, stopsArray);
-			}
-
-			if(choice==3)
-			{
-				boolean over = false;
-				while(over == false)
+				int choice = scanner.nextInt();
+				if(choice==1)
 				{
-					System.out.print("Please enter an arrival time (in the form hh:mm:ss) to see all available trips: ");
-					Scanner scanner2 = new Scanner(System.in);
-					String inputTime = scanner2.next();
-					if(validTime(inputTime))
-					{
-						timeSearch(inputTime);
-						over = true;
-						finished = true;
-					}
-					else
-					{
-						System.out.println("This is not a valid time.");
-					}
+
+
+					finished = true;
+				}
+				if(choice==2)
+				{
+					System.out.print("Please enter your search: ");
+					String searchWord = scanner.next();
+					searchWord = searchWord.toUpperCase();
+					ternarySearchTree(searchWord, stopsArray);
+					finished = true;
 				}
 
-			}
-			if(choice==4)
-			{
-				System.out.println("Goodbye. Thank you for visiting the Vancouver bus system.");
-				finished = true;
+				if(choice==3)
+				{
+					boolean over = false;
+					while(over == false)
+					{
+						System.out.print("Please enter an arrival time (in the form hh:mm:ss) to see all available trips: ");
+						Scanner scanner2 = new Scanner(System.in);
+						String inputTime = scanner2.next();
+						if(validTime(inputTime))
+						{
+							timeSearch(inputTime);
+							over = true;
+							finished = true;
+						}
+						else
+						{
+							System.out.println("This is not a valid time.");
+						}
+					}
+					finished =true;
+				}
+				if(choice==4)
+				{
+					System.out.println("Goodbye. Thank you for visiting the Vancouver bus system.");
+					finished = true;
+				}
+				
 			}
 			else
 			{
 				System.out.println();
-				System.out.println("Error! - Please enter a valid choice.");
+				System.out.println("Error, invalid choice! - Please enter an integer (1,2,3,4)");
 			}
-
 		}
 	}
 }

@@ -12,3 +12,16 @@
 /Queue$Node.class
 /Stops.class
 /busStops.class
+/DijkstraSP.class
+/EdgeWeightedGraph.class
+/Bag.class
+/Bag$LinkedIterator.class
+/Bag$Node.class
+/Edge.class
+/EdgeWeightedDigraph.class
+/DirectedEdge.class
+/IndexMinPQ.class
+/IndexMinPQ$HeapIterator.class
+/Stack.class
+/Stack$LinkedIterator.class
+/Stack$Node.class
