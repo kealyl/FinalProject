@@ -87,8 +87,9 @@ public class FinalProject {
 		}
 	}
 
-	public static void ternarySearchTree(String searchWord, ArrayList<busStops> stopArray)
+	public static void ternarySearchTree(String searchWord)
 	{
+		ArrayList<busStops> stopsArray = new ArrayList<busStops>();
 		try
 		{
 			File inputFile = new File("stops.txt");
@@ -110,13 +111,13 @@ public class FinalProject {
 				int location_type = Integer.parseInt(line[8]);
 				//String parent_station = line[9];	
 
-				stopArray.add(new busStops(stopID, stop_code, stop_name, stop_desc, stop_lat, stop_lon, 
+				stopsArray.add(new busStops(stopID, stop_code, stop_name, stop_desc, stop_lat, stop_lon, 
 						zone_id, stop_url, location_type));							
 
 			}
-			for(int index = 0; index < stopArray.size(); index++)
+			for(int index = 0; index < stopsArray.size(); index++)
 			{
-				newTST.put(stopArray.get(index).stop_name, stopArray.get(index));
+				newTST.put(stopsArray.get(index).stop_name, stopsArray.get(index));
 			}
 			System.out.print(newTST.size());
 			System.out.println("Search result: \n" + newTST.keysWithPrefix(searchWord.toUpperCase()));
@@ -161,7 +162,7 @@ public class FinalProject {
 
 	public static void main(String[] args)
 	{	
-		ArrayList<busStops> stopsArray = new ArrayList<busStops>();
+		
 		//ArrayList<Stops> stopsArray = new ArrayList<Stops>();
 		//TST<String> newTST = new TST<String>(); // create new TST
 		boolean finished = false;
@@ -190,7 +191,7 @@ public class FinalProject {
 					System.out.print("Please enter your search: ");
 					String searchWord = scanner.next();
 					searchWord = searchWord.toUpperCase();
-					ternarySearchTree(searchWord, stopsArray);
+					ternarySearchTree(searchWord);
 					finished = true;
 				}
 
