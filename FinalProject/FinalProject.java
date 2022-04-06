@@ -101,18 +101,17 @@ public class FinalProject {
 			{
 				String[] line = scanner.nextLine().trim().split(",");
 				int stopID = Integer.parseInt(line[0]);
-				int stop_code = Integer.parseInt(line[1]);
+				//int stop_code = Integer.parseInt(line[1]);
 				String stop_name = line[2];
-				String stop_desc = line[3];
-				String stop_lat = line[4];
-				String stop_lon = line[5];
-				String zone_id = line[6];
-				String stop_url = line[7];
-				int location_type = Integer.parseInt(line[8]);
+				//String stop_desc = line[3];
+				//String stop_lat = line[4];
+				//String stop_lon = line[5];
+				//String zone_id = line[6];
+				//String stop_url = line[7];
+				//int location_type = Integer.parseInt(line[8]);
 				//String parent_station = line[9];	
 
-				stopsArray.add(new busStops(stopID, stop_code, stop_name, stop_desc, stop_lat, stop_lon, 
-						zone_id, stop_url, location_type));							
+				stopsArray.add(new busStops(stopID, stop_name));							
 
 			}
 			for(int index = 0; index < stopsArray.size(); index++)
