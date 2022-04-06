@@ -98,43 +98,48 @@ public class FinalProject {
 		}
 	}
 
-	public static void ternarySearchTree(String searchWord)
+	public static void ternarySearchTree(String searchWord, ArrayList<busStops> stopArray)
 	{
+		
 		try
 		{
 			File inputFile = new File("stops.txt");
 			Scanner scanner = new Scanner(inputFile);
-			scanner.nextLine(); //skips first line of text file
+			
 			TST<String> newTST = new TST<String>(); // create new TST
-			ArrayList<String> stopNames = new ArrayList<>();
-			int i = 0;
+			scanner.nextLine(); //skips first line of text file
 			while(scanner.hasNextLine())
 			{
 				String[] line = scanner.nextLine().trim().split(",");
+				int stopID = Integer.parseInt(line[0]);
+				int stop_code = Integer.parseInt(line[1]);
 				String stop_name = line[2];
+				String stop_desc = line[3];
+				String stop_lat = line[4];
+				String stop_lon = line[5];
+				String zone_id = line[6];
+				String stop_url = line[7];
+				int location_type = Integer.parseInt(line[8]);
+				//String parent_station = line[9];	
 
-				//moving keyword flagstops WB,NB,SB,EB to end of word
-				String[] splitStopName = stop_name.split(" ");
-				String flagstop = splitStopName[0]; //might need to trim
-				if(flagstop.equalsIgnoreCase("WB") || flagstop.equalsIgnoreCase("NB") || flagstop.equalsIgnoreCase("SB")
-						|| flagstop.equalsIgnoreCase("EB"))
-				{
-					flagstop = splitStopName[splitStopName.length-1]; //put flagstop to end of stopName
-					stop_name = splitStopName.toString(); //prints new layout of stop_name
-				}
-				//stopNames.add(stop_name);
-				//newTST.put(stop_name, i);
-				i++;
+				stopArray.add(new busStops(stopID, stop_code, stop_name, stop_desc, stop_lat, stop_lon, 
+						zone_id, stop_url, location_type));							
+
 			}
-			/*
-			boolean searchSuccessful = newTST.search(searchWord); //returns true if finds item
-			if(searchSuccessful)
+			for(int index = 0; index < stopArray.size(); index++)
 			{
-				//print out info about stop
-
+				newTST.put(stopArray.get(index).stop_name, stopArray.get(index));
 			}
-			 */
-
+			System.out.print(newTST.size());
+			System.out.println("Search result: \n" + newTST.keysWithPrefix(searchWord.toUpperCase()));
+			if(newTST.keysWithPrefix(searchWord.toUpperCase()) != null)
+			{
+				System.out.println("Search result: \n" + newTST.keysWithPrefix(searchWord.toUpperCase()));
+			}
+			else
+			{
+				System.out.println("Your search was unsuccessful.");
+			}
 		}
 
 		catch(Exception e)
@@ -143,11 +148,30 @@ public class FinalProject {
 		}		
 	}
 
+	/*
+	public static String removeFlagStop(String stopName)
+	{
+		//moving keyword flagstops WB,NB,SB,EB to end of word
+		String[] splitStopName = stopName.split(" ");
+		String flagstop = splitStopName[0]; //might need to trim
+		if(flagstop.equalsIgnoreCase("WB") || flagstop.equalsIgnoreCase("NB") || flagstop.equalsIgnoreCase("SB")
+				|| flagstop.equalsIgnoreCase("EB"))
+		{
+			flagstop = splitStopName[splitStopName.length-1]; //put flagstop to end of stopName
+			stop_name = splitStopName.toString(); //prints new layout of stop_name
+		}
+
+
+	}
+	 */
 	public static void main(String[] args)
 	{	
+		ArrayList<busStops> stopsArray = new ArrayList<busStops>();
+		//ArrayList<Stops> stopsArray = new ArrayList<Stops>();
+		//TST<String> newTST = new TST<String>(); // create new TST
 		boolean finished = false;
 		System.out.println("Welcome! This is the Vancouver bus system. ");
-		
+
 		while(finished == false)
 		{
 			System.out.print("Type '1' if you wish to find the shortest path between two bus stops.\n"
@@ -161,36 +185,15 @@ public class FinalProject {
 			if(choice==1)
 			{
 
+
 				finished = true;
 			}
 			if(choice==2)
 			{
-				/*
-			System.out.print("Please enter your search: ");
-			String searchWord = scanner.next();
-			ternarySearchTree(searchWord);
-
-			ArrayList<String> words = new ArrayList<>();
-			words.add("hello");
-			words.add("There");
-			words.add("how");
-			words.add("are");
-			words.add("you");
-			TST newTST = new TST(words);
-			System.out.print("Please enter your search: ");
-			Scanner scanner = new Scanner(System.in);
-			String searchWord = scanner.next();
-			boolean searchSuccessful = newTST.search(searchWord); //returns true if finds item
-			if(searchSuccessful)
-			{
-				System.out.println("Search successful");
-			}
-			else
-			{
-				System.out.println("Search unsuccessful");
-			}
-				 */
-				finished = true;
+				System.out.print("Please enter your search: ");
+				String searchWord = scanner.next();
+				searchWord = searchWord.toUpperCase();
+				ternarySearchTree(searchWord, stopsArray);
 			}
 
 			if(choice==3)
@@ -212,7 +215,7 @@ public class FinalProject {
 						System.out.println("This is not a valid time.");
 					}
 				}
-				
+
 			}
 			if(choice==4)
 			{

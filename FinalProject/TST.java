@@ -77,7 +77,7 @@ public class TST<Value> {
 		}
 	}
 
-	public void put(String key, Value value) //inserts key value pair into TST
+	public void put(String key, busStops stop) //inserts key value pair into TST
 	{
 		if (key == null) 
 		{
@@ -88,15 +88,15 @@ public class TST<Value> {
 			size++;
 		}
 		
-		else if(value == null) 
+		else if(stop == null) 
 		{
 			size--;       // delete existing key
 		}
 		
-		root = put(root, key, value, 0);
+		root = put(root, key, stop, 0);
 	}
 
-	private Node<Value> put(Node<Value> node, String key, Value value, int i) 
+	private Node<Value> put(Node<Value> node, String key, busStops stop, int i) 
 	{
 		char character = key.charAt(i);
 		if (node == null) 
@@ -106,19 +106,19 @@ public class TST<Value> {
 		}
 		if(character < node.character) 
 		{
-			node.left  = put(node.left, key, value, i);
+			node.left  = put(node.left, key, stop, i);
 		}
 		else if(character > node.character)
 		{
-			node.right = put(node.right, key, value, i);
+			node.right = put(node.right, key, stop, i);
 		}
 		else if (i < key.length() - 1)
 		{
-			node.middle = put(node.middle, key, value, i+1);
+			node.middle = put(node.middle, key, stop, i+1);
 		}
 		else
 		{
-			node.value   = value;
+			//node.value = stop;
 		}
 		return node;
 	}
