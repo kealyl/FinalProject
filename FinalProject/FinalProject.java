@@ -37,6 +37,51 @@ public class FinalProject {
 		return array;
 	}
 
+	public static void shortestPath(int stopID1, int stopID2)
+	{
+		ArrayList<busStops> stopsArray = new ArrayList<busStops>();
+		ArrayList<StopTimes> stopTimesArray = new ArrayList<StopTimes>();
+		try
+		{
+			/*
+			File inputFile = new File("stops.txt");
+			Scanner scanner = new Scanner(inputFile);
+			scanner.nextLine(); //skips first line of text file
+			while(scanner.hasNextLine())
+			{
+				String[] line = scanner.nextLine().trim().split(",");
+				int stopID = Integer.parseInt(line[0]);
+				//int stop_code = Integer.parseInt(line[1]);
+				String stop_name = line[2];
+				stopsArray.add(new busStops(stopID, stop_name));	
+			}
+			int numberOfEdges = stopsArray.size(); //number of stops
+			EdgeWeightedDigraph graph = new EdgeWeightedDigraph(numberOfEdges);
+			*/
+			
+			File inputFile1 = new File("stop_times.txt");
+			Scanner scanner1 = new Scanner(inputFile1);
+			scanner1.nextLine(); //skips first line of text file
+			while(scanner1.hasNextLine())
+			{
+				String[] line = scanner1.nextLine().trim().split(",");
+				int tripID = Integer.parseInt(line[0]);
+				stopTimesArray.add(new StopTimes(tripID));
+			}
+			for(int i = 0; i < stopTimesArray.size(); i++)
+			{
+				if(stopTimesArray.get(i).trip_id == stopTimesArray.get(i+1).trip_id) 
+				{
+					//if 2 consecutive stops have same tripID - add edge
+					
+				}
+			}
+		}
+		catch(Exception e)
+		{
+
+		}
+	}
 	public static void timeSearch(String inputTime) //search for bus time and print out info about matching stop time
 	{
 		try
@@ -77,7 +122,7 @@ public class FinalProject {
 			} 
 			if (i == 0) // if no matching times found
 			{
-				System.out.print("Sorry, there are no buses departing at this time.");
+				System.out.print("Sorry, there are no buses arriving at this time.\n");
 			}
 		}
 
@@ -86,11 +131,11 @@ public class FinalProject {
 			System.out.print("Error reading in file.");
 		}
 	}
-	
+
 	public String removeFlagstop(String stopName)
 	{
-		  String []temp = stopName.split(" ", 2); // separates first word from rest of string
-		  return temp[1] + " " + temp[0];
+		String []temp = stopName.split(" ", 2); // separates first word from rest of string
+		return temp[1] + " " + temp[0];
 	}
 
 	public static void ternarySearchTree(String searchWord)
@@ -111,7 +156,7 @@ public class FinalProject {
 				String stop_name = line[2];
 				stop_name = stop_name.replaceAll("(\\S+) (.*)$", "$2 $1"); 
 				//System.out.println(stop_name);
-				
+
 				//String stop_desc = line[3];
 				//String stop_lat = line[4];
 				//String stop_lon = line[5];
@@ -123,7 +168,7 @@ public class FinalProject {
 				stopsArray.add(new busStops(stopID, stop_name));							
 
 			}
-			
+
 			for(int index = 0; index < stopsArray.size(); index++)
 			{
 				newTST.put(stopsArray.get(index).stop_name, stopsArray.get(index));
@@ -139,8 +184,8 @@ public class FinalProject {
 			{
 				System.out.println("Your search was unsuccessful.");
 			}
-			*/
-			
+			 */
+
 		}
 
 		catch(Exception e)
@@ -172,11 +217,11 @@ public class FinalProject {
 		}
 		return splitStopName.toString();
 	}
-	*/
+	 */
 
 	public static void main(String[] args)
 	{	
-		
+
 		//ArrayList<Stops> stopsArray = new ArrayList<Stops>();
 		//TST<String> newTST = new TST<String>(); // create new TST
 		boolean finished = false;
@@ -196,9 +241,15 @@ public class FinalProject {
 				int choice = scanner.nextInt();
 				if(choice==1)
 				{
+					System.out.print("Please type the stop IDs of the 2 bus stops (separated by a comma with no spaces): ");
+					String busStopSearch = scanner.next();
+					String[] temp = busStopSearch.split(",");
+					int busStop1 = Integer.parseInt(temp[0]);
+					int busStop2 = Integer.parseInt(temp[1]);
+					System.out.println("Shortest path between Stop " + busStop1 + " & Stop " + busStop2 + ": ");
 
 
-					finished = true;
+					//finished = true;
 				}
 				if(choice==2)
 				{
@@ -206,7 +257,7 @@ public class FinalProject {
 					String searchWord = scanner.next();
 					searchWord = searchWord.toUpperCase();
 					ternarySearchTree(searchWord);
-					finished = true;
+					//finished = true;
 				}
 
 				if(choice==3)
@@ -221,21 +272,21 @@ public class FinalProject {
 						{
 							timeSearch(inputTime);
 							over = true;
-							finished = true;
+							//finished = true;
 						}
 						else
 						{
-							System.out.println("This is not a valid time.");
+							System.out.println("This is not a valid time.\n");
 						}
 					}
-					finished =true;
+					//finished = true;
 				}
 				if(choice==4)
 				{
-					System.out.println("Goodbye. Thank you for visiting the Vancouver bus system.");
+					System.out.println("\nGoodbye. Thank you for visiting the Vancouver bus system.");
 					finished = true;
 				}
-				
+
 			}
 			else
 			{
