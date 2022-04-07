@@ -110,12 +110,11 @@ public class FinalProject {
 		{
 			return stopName;
 		}
-		
+
 	}
 
 	public static void ternarySearchTree(String searchWord)
 	{
-		
 		try
 		{
 			File inputFile = new File("stops.txt");
@@ -131,48 +130,33 @@ public class FinalProject {
 				String stop_name = line[2];
 				String stopNameUpdate = removeFlagstop(stop_name); //removes 'flagstop' start of from stop_name
 				String stopNameFinal = removeWBSBNBEB(stopNameUpdate);
-				//System.out.println(stopNameFinal);
+				//System.out.println(stopNameFinal); //prints out stop names correctly
 
-				stopsArray.add(new busStops(stopID, stopNameFinal));							
+				stopsArray.add(new busStops(stopID, stopNameFinal)); //adding stops to array						
 			}
 
-			
 			for(int index = 0; index < stopsArray.size(); index++) //adding each stopName to TST
 			{
 				newTST.put(stopsArray.get(index).stop_name, stopsArray.get(index));
 			}
-			System.out.print(newTST.size()); //check printing out right size of TST - yes (8757)
+			System.out.print("TST size: " + newTST.size()); //check printing out right size of TST - yes (8757)
 
 			Iterable<String> stops = newTST.keysWithPrefix(searchWord);
-			System.out.println(stops);
-			//int count = 0;
-			for(String stop : stops)
+			int counter = 0;
+			for (String stop : stops) 
 			{
-				for(int index = 0; index < stopsArray.size(); index++)
+				counter++;
+				if(counter == 1) 
 				{
-					if(stop.equals(stopsArray.get(index).stop_name))
-					{
-						System.out.println("\nStop Name: " + stopsArray.get(index).stop_name + 
-								"\nStop ID: " + stopsArray.get(index).stop_id);
-					}
+					System.out.println("Bus stop Search Successful:");
 				}
-
+				else if(counter == 0) 
+				{
+					System.out.print("Sorry. We could not find any bus stops matching your search.");
+				}
+				busStops stopOutput =  newTST.get(stop);
+				System.out.println("\nStop Name: " + stopOutput.stop_name + "\nStop ID: " + stopOutput.stop_id + "\n");
 			}
-			
-
-
-
-			/*
-			if(newTST.keysWithPrefix(searchWord.toUpperCase()) != null)
-			{
-				System.out.println("Search result: \n" + newTST.keysWithPrefix(searchWord.toUpperCase()));
-			}
-			else
-			{
-				System.out.println("Your search was unsuccessful.");
-			}
-			 */
-
 		}
 
 		catch(Exception e)
@@ -185,9 +169,10 @@ public class FinalProject {
 	{
 		ArrayList<busStops> stopsArray = new ArrayList<busStops>();
 		ArrayList<StopTimes> stopTimesArray = new ArrayList<StopTimes>();
+		ArrayList<Transfers> transfersArray = new ArrayList<Transfers>();
 		try
 		{
-			/*
+
 			File inputFile = new File("stops.txt");
 			Scanner scanner = new Scanner(inputFile);
 			scanner.nextLine(); //skips first line of text file
@@ -199,9 +184,12 @@ public class FinalProject {
 				String stop_name = line[2];
 				stopsArray.add(new busStops(stopID, stop_name));	
 			}
-			int numberOfEdges = stopsArray.size(); //number of stops
-			EdgeWeightedDigraph graph = new EdgeWeightedDigraph(numberOfEdges);
-			 */
+			int numberOfVertices = stopsArray.size(); //number of stops
+			System.out.println("No. of Vertices: " + numberOfVertices); //8757 as expected
+			EdgeWeightedDigraph graph = new EdgeWeightedDigraph(numberOfVertices); 
+
+			//12479 edges found by trial and error		
+
 
 			File inputFile1 = new File("stop_times.txt");
 			Scanner scanner1 = new Scanner(inputFile1);
@@ -210,20 +198,57 @@ public class FinalProject {
 			{
 				String[] line = scanner1.nextLine().trim().split(",");
 				int tripID = Integer.parseInt(line[0]);
-				stopTimesArray.add(new StopTimes(tripID));
+				int stopID = Integer.parseInt(line[3]);
+				stopTimesArray.add(new StopTimes(tripID, stopID));
 			}
+
+			//setting edges from stop_times.txt
 			for(int i = 0; i < stopTimesArray.size(); i++)
 			{
+
 				if(stopTimesArray.get(i).trip_id == stopTimesArray.get(i+1).trip_id) 
 				{
-					//if 2 consecutive stops have same tripID - add edge
-
+					//if 2 consecutive stops have same tripID - add edge (cost 1 as comes from stop_times.txt)
+					DirectedEdge edge = new DirectedEdge(stopTimesArray.get(i).stop_id, stopTimesArray.get(i+1).stop_id, 1); 
+					graph.addEdge(edge);
 				}
 			}
+			
+			File inputFile2 = new File("transfers.txt");
+			Scanner scanner2 = new Scanner(inputFile1);
+			scanner2.nextLine(); //skips first line of text file
+			while(scanner2.hasNextLine())
+			{
+				String[] line = scanner2.nextLine().trim().split(",");
+				int from_stopID = Integer.parseInt(line[0]);
+				int to_stopID = Integer.parseInt(line[1]);
+				int transfer_type = Integer.parseInt(line[2]);
+				int min_transfer_time = Integer.parseInt(line[3]);
+				transfersArray.add(new Transfers(from_stopID, to_stopID, transfer_type, min_transfer_time));
+			}
+			//setting edges from transfers.txt
+			for(int i = 0; i < transfersArray.size(); i++)
+			{
+				if(transfersArray.get(i).transfer_type == 0)
+				{
+					DirectedEdge edge = new DirectedEdge(transfersArray.get(i).from_stopID, transfersArray.get(i).to_stopID, 2); 
+					graph.addEdge(edge);
+				}
+				else if(transfersArray.get(i).transfer_type == 2)
+				{
+					DirectedEdge edge = new DirectedEdge(transfersArray.get(i).from_stopID, transfersArray.get(i).to_stopID, (transfersArray.get(i).min_transfer_time / 100));
+					graph.addEdge(edge);
+				}
+			}
+			DijkstraSP SP = new DijkstraSP(graph, stopID1);
+			SP.pathTo(stopID2); // should return shortest path from user input stop 1 to stop 2	
+			//graph.E();
+			//graph.V();
 		}
+
 		catch(Exception e)
 		{
-
+			System.out.print("Error reading in file.");
 		}
 	}
 
@@ -255,8 +280,7 @@ public class FinalProject {
 					int busStop1 = Integer.parseInt(temp[0]);
 					int busStop2 = Integer.parseInt(temp[1]);
 					System.out.println("Shortest path between Stop " + busStop1 + " & Stop " + busStop2 + ": ");
-
-
+					shortestPath(busStop1, busStop2);
 					//finished = true;
 				}
 				if(choice==2)
@@ -265,7 +289,7 @@ public class FinalProject {
 					String searchWord = scanner.next();
 					searchWord = searchWord.toUpperCase();
 					ternarySearchTree(searchWord);
-					finished = true;
+					//finished = true;
 				}
 
 				if(choice==3)

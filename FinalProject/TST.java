@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 //old
 public class TST<Value> {
 
@@ -162,7 +165,7 @@ public class TST<Value> {
 
 	public Iterable<String> keys() 
 	{
-		Queue<String> queue = new Queue<String>();
+		Queue<String> queue = new LinkedList<String>();
 		collect(root, new StringBuilder(), queue);
 		return queue;
 	}
@@ -174,7 +177,7 @@ public class TST<Value> {
 		{
 			throw new IllegalArgumentException("calls keysWithPrefix() with null argument");
 		}
-		Queue<String> queue = new Queue<String>();
+		Queue<String> queue = new LinkedList<String>();
 		Node<Value> x = get(root, prefix, 0);
 		if (x == null) 
 		{
@@ -182,7 +185,7 @@ public class TST<Value> {
 		}
 		if (x.value != null) 
 		{
-			queue.enqueue(prefix);
+			queue.add(prefix);
 		}
 		collect(x.middle, new StringBuilder(prefix), queue);
 		return queue;
@@ -197,7 +200,7 @@ public class TST<Value> {
 		collect(x.left,  prefix, queue);
 		if (x.value != null) 
 		{
-			queue.enqueue(prefix.toString() + x.character);
+			queue.add(prefix.toString() + x.character);
 		}
 		collect(x.middle,   prefix.append(x.character), queue);
 		prefix.deleteCharAt(prefix.length() - 1);
@@ -206,7 +209,7 @@ public class TST<Value> {
 
 	public Iterable<String> keysThatMatch(String pattern) 
 	{
-		Queue<String> queue = new Queue<String>();
+		Queue<String> queue = new LinkedList<String>();
 		collect(root, new StringBuilder(), 0, pattern, queue);
 		return queue;
 	}
@@ -226,7 +229,7 @@ public class TST<Value> {
 		{
 			if (i == pattern.length() - 1 && x.value != null) 
 			{
-				queue.enqueue(prefix.toString() + x.character);
+				queue.add(prefix.toString() + x.character);
 			}
 			if (i < pattern.length() - 1) 
 			{
