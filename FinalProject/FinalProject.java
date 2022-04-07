@@ -37,51 +37,6 @@ public class FinalProject {
 		return array;
 	}
 
-	public static void shortestPath(int stopID1, int stopID2)
-	{
-		ArrayList<busStops> stopsArray = new ArrayList<busStops>();
-		ArrayList<StopTimes> stopTimesArray = new ArrayList<StopTimes>();
-		try
-		{
-			/*
-			File inputFile = new File("stops.txt");
-			Scanner scanner = new Scanner(inputFile);
-			scanner.nextLine(); //skips first line of text file
-			while(scanner.hasNextLine())
-			{
-				String[] line = scanner.nextLine().trim().split(",");
-				int stopID = Integer.parseInt(line[0]);
-				//int stop_code = Integer.parseInt(line[1]);
-				String stop_name = line[2];
-				stopsArray.add(new busStops(stopID, stop_name));	
-			}
-			int numberOfEdges = stopsArray.size(); //number of stops
-			EdgeWeightedDigraph graph = new EdgeWeightedDigraph(numberOfEdges);
-			*/
-			
-			File inputFile1 = new File("stop_times.txt");
-			Scanner scanner1 = new Scanner(inputFile1);
-			scanner1.nextLine(); //skips first line of text file
-			while(scanner1.hasNextLine())
-			{
-				String[] line = scanner1.nextLine().trim().split(",");
-				int tripID = Integer.parseInt(line[0]);
-				stopTimesArray.add(new StopTimes(tripID));
-			}
-			for(int i = 0; i < stopTimesArray.size(); i++)
-			{
-				if(stopTimesArray.get(i).trip_id == stopTimesArray.get(i+1).trip_id) 
-				{
-					//if 2 consecutive stops have same tripID - add edge
-					
-				}
-			}
-		}
-		catch(Exception e)
-		{
-
-		}
-	}
 	public static void timeSearch(String inputTime) //search for bus time and print out info about matching stop time
 	{
 		try
@@ -132,10 +87,17 @@ public class FinalProject {
 		}
 	}
 
-	public String removeFlagstop(String stopName)
+	public static String removeFlagstop(String stopName)
 	{
+		if(stopName.startsWith("FLAGSTOP"))
+		{
 		String []temp = stopName.split(" ", 2); // separates first word from rest of string
 		return temp[1] + " " + temp[0];
+		}
+		else
+		{
+			return stopName;
+		}
 	}
 
 	public static void ternarySearchTree(String searchWord)
@@ -145,8 +107,7 @@ public class FinalProject {
 		{
 			File inputFile = new File("stops.txt");
 			Scanner scanner = new Scanner(inputFile);
-
-			TST<String> newTST = new TST<String>(); // create new TST
+			TST<busStops> newTST = new TST<busStops>(); // create new TST
 			scanner.nextLine(); //skips first line of text file
 			while(scanner.hasNextLine())
 			{
@@ -154,8 +115,9 @@ public class FinalProject {
 				int stopID = Integer.parseInt(line[0]);
 				//int stop_code = Integer.parseInt(line[1]);
 				String stop_name = line[2];
-				stop_name = stop_name.replaceAll("(\\S+) (.*)$", "$2 $1"); 
-				//System.out.println(stop_name);
+				String stopNameUpdate = removeFlagstop(stop_name);
+				stopNameUpdate = stopNameUpdate.replaceAll("(\\S+) (.*)$", "$2 $1"); 
+				//System.out.println(stopNameUpdate);
 
 				//String stop_desc = line[3];
 				//String stop_lat = line[4];
@@ -172,9 +134,29 @@ public class FinalProject {
 			{
 				newTST.put(stopsArray.get(index).stop_name, stopsArray.get(index));
 			}
-			System.out.print(newTST.size());
+			//System.out.print(newTST.size());
 			
-			System.out.println(newTST.keysWithPrefix(searchWord));
+			Iterable<String> stops = newTST.keysWithPrefix(searchWord);
+			int count = 0;
+			for(String stop : stops)
+			{
+				count++;
+				if(count==1)
+				{
+					System.out.println("Bus Stop Search Successful: ");
+				}
+				else if(count==0)
+				{
+					System.out.println("Sorry. We could not find any stops for your search.");
+				}
+				busStops output = newTST.get(stop);
+				System.out.println("\nStop Name: " + output.stop_name + "\nStop ID: " + output.stop_id);
+				System.out.println();
+				
+			}
+			
+			
+			
 			
 			/*
 			if(newTST.keysWithPrefix(searchWord.toUpperCase()) != null)
@@ -195,30 +177,51 @@ public class FinalProject {
 		}		
 	}
 
-
-	/*
-	public static String removeFlagStop(String stopName)
+	public static void shortestPath(int stopID1, int stopID2)
 	{
-		String[] splitStopName = stopName.split(" ");
-		String flagstop = splitStopName[0]; //might need to trim
-		String[] flagstopArray = {splitStopName[0], " ", splitStopName[1]};
-		String flagstopLong = flagstopArray.toString();
+		ArrayList<busStops> stopsArray = new ArrayList<busStops>();
+		ArrayList<StopTimes> stopTimesArray = new ArrayList<StopTimes>();
+		try
+		{
+			/*
+			File inputFile = new File("stops.txt");
+			Scanner scanner = new Scanner(inputFile);
+			scanner.nextLine(); //skips first line of text file
+			while(scanner.hasNextLine())
+			{
+				String[] line = scanner.nextLine().trim().split(",");
+				int stopID = Integer.parseInt(line[0]);
+				//int stop_code = Integer.parseInt(line[1]);
+				String stop_name = line[2];
+				stopsArray.add(new busStops(stopID, stop_name));	
+			}
+			int numberOfEdges = stopsArray.size(); //number of stops
+			EdgeWeightedDigraph graph = new EdgeWeightedDigraph(numberOfEdges);
+			 */
 
-		//moving keyword flagstops,WB,NB,SB,EB to end of word
-		if(flagstop.equalsIgnoreCase("WB") || flagstop.equalsIgnoreCase("NB") || flagstop.equalsIgnoreCase("SB")
-				|| flagstop.equalsIgnoreCase("EB") || flagstop.equalsIgnoreCase("flagstop"))
-		{
-			flagstop = splitStopName[splitStopName.length-1]; //put flagstop to end of stopName
-			stopName = splitStopName.toString(); //prints new layout of stop_name
+			File inputFile1 = new File("stop_times.txt");
+			Scanner scanner1 = new Scanner(inputFile1);
+			scanner1.nextLine(); //skips first line of text file
+			while(scanner1.hasNextLine())
+			{
+				String[] line = scanner1.nextLine().trim().split(",");
+				int tripID = Integer.parseInt(line[0]);
+				stopTimesArray.add(new StopTimes(tripID));
+			}
+			for(int i = 0; i < stopTimesArray.size(); i++)
+			{
+				if(stopTimesArray.get(i).trip_id == stopTimesArray.get(i+1).trip_id) 
+				{
+					//if 2 consecutive stops have same tripID - add edge
+
+				}
+			}
 		}
-		if(flagstopLong.equalsIgnoreCase("FLAGSTOP WB") || flagstopLong.equalsIgnoreCase("FLAGSTOP NB") || 
-				flagstopLong.equalsIgnoreCase("FLAGSTOP SB") || flagstopLong.equalsIgnoreCase("FLAGSTOP EB"))
+		catch(Exception e)
 		{
-			flagstopLong = splitStopName[splitStopName.length-1];
+
 		}
-		return splitStopName.toString();
 	}
-	 */
 
 	public static void main(String[] args)
 	{	
