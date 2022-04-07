@@ -102,7 +102,7 @@ public class FinalProject {
 				String[] line = scanner.nextLine().trim().split(",");
 				int stopID = Integer.parseInt(line[0]);
 				//int stop_code = Integer.parseInt(line[1]);
-				String stop_name = line[2];
+				String stop_name = line[2];//fix up name before read into tst
 				//String stop_desc = line[3];
 				//String stop_lat = line[4];
 				//String stop_lon = line[5];
