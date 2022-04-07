@@ -86,6 +86,12 @@ public class FinalProject {
 			System.out.print("Error reading in file.");
 		}
 	}
+	
+	public String removeFlagstop(String stopName)
+	{
+		  String []temp = stopName.split(" ", 2); // separates first word from rest of string
+		  return temp[1] + " " + temp[0];
+	}
 
 	public static void ternarySearchTree(String searchWord)
 	{
@@ -102,7 +108,10 @@ public class FinalProject {
 				String[] line = scanner.nextLine().trim().split(",");
 				int stopID = Integer.parseInt(line[0]);
 				//int stop_code = Integer.parseInt(line[1]);
-				String stop_name = line[2];//fix up name before read into tst
+				String stop_name = line[2];
+				stop_name = stop_name.replaceAll("(\\S+) (.*)$", "$2 $1"); 
+				//System.out.println(stop_name);
+				
 				//String stop_desc = line[3];
 				//String stop_lat = line[4];
 				//String stop_lon = line[5];
@@ -114,12 +123,14 @@ public class FinalProject {
 				stopsArray.add(new busStops(stopID, stop_name));							
 
 			}
+			
 			for(int index = 0; index < stopsArray.size(); index++)
 			{
 				newTST.put(stopsArray.get(index).stop_name, stopsArray.get(index));
 			}
-			System.out.print(newTST.size());
-			System.out.println("Search result: \n" + newTST.keysWithPrefix(searchWord.toUpperCase()));
+			//System.out.print(newTST.size());
+			newTST.keysWithPrefix(searchWord.toUpperCase());
+			/*
 			if(newTST.keysWithPrefix(searchWord.toUpperCase()) != null)
 			{
 				System.out.println("Search result: \n" + newTST.keysWithPrefix(searchWord.toUpperCase()));
@@ -128,6 +139,8 @@ public class FinalProject {
 			{
 				System.out.println("Your search was unsuccessful.");
 			}
+			*/
+			
 		}
 
 		catch(Exception e)
@@ -137,6 +150,7 @@ public class FinalProject {
 	}
 
 
+	/*
 	public static String removeFlagStop(String stopName)
 	{
 		String[] splitStopName = stopName.split(" ");
@@ -158,6 +172,7 @@ public class FinalProject {
 		}
 		return splitStopName.toString();
 	}
+	*/
 
 	public static void main(String[] args)
 	{	
