@@ -166,15 +166,16 @@ public class FinalProject {
 				//String parent_station = line[9];	
 
 				stopsArray.add(new busStops(stopID, stop_name));							
-
 			}
-
+			
 			for(int index = 0; index < stopsArray.size(); index++)
 			{
 				newTST.put(stopsArray.get(index).stop_name, stopsArray.get(index));
 			}
-			//System.out.print(newTST.size());
-			newTST.keysWithPrefix(searchWord.toUpperCase());
+			System.out.print(newTST.size());
+			
+			System.out.println(newTST.keysWithPrefix(searchWord));
+			
 			/*
 			if(newTST.keysWithPrefix(searchWord.toUpperCase()) != null)
 			{
@@ -225,7 +226,7 @@ public class FinalProject {
 		//ArrayList<Stops> stopsArray = new ArrayList<Stops>();
 		//TST<String> newTST = new TST<String>(); // create new TST
 		boolean finished = false;
-		System.out.println("Welcome! This is the Vancouver bus system. ");
+		System.out.println("WELCOME TO THE VANCOUVER BUS SYSTEM. ");
 
 		while(finished == false)
 		{
