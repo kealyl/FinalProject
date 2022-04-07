@@ -91,22 +91,36 @@ public class FinalProject {
 	{
 		if(stopName.startsWith("FLAGSTOP"))
 		{
-		String []temp = stopName.split(" ", 2); // separates first word from rest of string
-		return temp[1] + " " + temp[0];
+			String[] temp = stopName.split(" ", 2); // separates first word from rest of string
+			return temp[1] + " " + temp[0];
 		}
 		else
 		{
 			return stopName;
 		}
 	}
+	public static String removeWBSBNBEB(String stopName)
+	{
+		if(stopName.startsWith("WB") || stopName.startsWith("SB") || stopName.startsWith("NB") || stopName.startsWith("EB"))
+		{
+			String[] temp = stopName.split(" ", 2);
+			return temp[1] + " " + temp[0];
+		}
+		else
+		{
+			return stopName;
+		}
+		
+	}
 
 	public static void ternarySearchTree(String searchWord)
 	{
-		ArrayList<busStops> stopsArray = new ArrayList<busStops>();
+		
 		try
 		{
 			File inputFile = new File("stops.txt");
 			Scanner scanner = new Scanner(inputFile);
+			ArrayList<busStops> stopsArray = new ArrayList<busStops>();
 			TST<busStops> newTST = new TST<busStops>(); // create new TST
 			scanner.nextLine(); //skips first line of text file
 			while(scanner.hasNextLine())
@@ -115,49 +129,39 @@ public class FinalProject {
 				int stopID = Integer.parseInt(line[0]);
 				//int stop_code = Integer.parseInt(line[1]);
 				String stop_name = line[2];
-				String stopNameUpdate = removeFlagstop(stop_name);
-				stopNameUpdate = stopNameUpdate.replaceAll("(\\S+) (.*)$", "$2 $1"); 
-				//System.out.println(stopNameUpdate);
+				String stopNameUpdate = removeFlagstop(stop_name); //removes 'flagstop' start of from stop_name
+				String stopNameFinal = removeWBSBNBEB(stopNameUpdate);
+				//System.out.println(stopNameFinal);
 
-				//String stop_desc = line[3];
-				//String stop_lat = line[4];
-				//String stop_lon = line[5];
-				//String zone_id = line[6];
-				//String stop_url = line[7];
-				//int location_type = Integer.parseInt(line[8]);
-				//String parent_station = line[9];	
-
-				stopsArray.add(new busStops(stopID, stop_name));							
+				stopsArray.add(new busStops(stopID, stopNameFinal));							
 			}
+
 			
-			for(int index = 0; index < stopsArray.size(); index++)
+			for(int index = 0; index < stopsArray.size(); index++) //adding each stopName to TST
 			{
 				newTST.put(stopsArray.get(index).stop_name, stopsArray.get(index));
 			}
-			//System.out.print(newTST.size());
-			
+			System.out.print(newTST.size()); //check printing out right size of TST - yes (8757)
+
 			Iterable<String> stops = newTST.keysWithPrefix(searchWord);
-			int count = 0;
+			System.out.println(stops);
+			//int count = 0;
 			for(String stop : stops)
 			{
-				count++;
-				if(count==1)
+				for(int index = 0; index < stopsArray.size(); index++)
 				{
-					System.out.println("Bus Stop Search Successful: ");
+					if(stop.equals(stopsArray.get(index).stop_name))
+					{
+						System.out.println("\nStop Name: " + stopsArray.get(index).stop_name + 
+								"\nStop ID: " + stopsArray.get(index).stop_id);
+					}
 				}
-				else if(count==0)
-				{
-					System.out.println("Sorry. We could not find any stops for your search.");
-				}
-				busStops output = newTST.get(stop);
-				System.out.println("\nStop Name: " + output.stop_name + "\nStop ID: " + output.stop_id);
-				System.out.println();
-				
+
 			}
 			
-			
-			
-			
+
+
+
 			/*
 			if(newTST.keysWithPrefix(searchWord.toUpperCase()) != null)
 			{
@@ -261,7 +265,7 @@ public class FinalProject {
 					String searchWord = scanner.next();
 					searchWord = searchWord.toUpperCase();
 					ternarySearchTree(searchWord);
-					//finished = true;
+					finished = true;
 				}
 
 				if(choice==3)
